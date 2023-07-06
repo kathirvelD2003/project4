@@ -1,0 +1,46 @@
+import mysql.connector
+mydb = mysql.connector.connect(
+  host="localhost",
+  user="root",
+  password="root",
+)
+def createdb():
+  cur=mydb.cursor()
+  cur.execute("create database test")
+  cur.close
+
+def createt():
+  cur=mydb.cursor()
+  cur.execute("create table test.question( id integer auto_increment,q varchar(50),ans varchar(50),primary key (id))")
+  cur.close
+
+def insert(q,a):
+  cur = mydb.cursor()
+  q=("insert into test.question(q,ans) values('{qu}','{a}')").format(qu=q,a=a)
+  cur.execute(q)
+  mydb.commit()
+  cur.close
+
+
+
+def test():
+  s=0
+  cur = mydb.cursor()
+  q = "select * from test.question"
+  cur.execute(q)
+  r=cur.fetchall()
+  cur.close()
+  for i in r:
+      print(i[1])
+      a=input()
+      if(a==i[2]):
+        s+=1
+  print("your scored ",s,"marks")
+createdb()
+createt()
+insert("calculate 1+2","3")
+insert("calculate 1*2","2")
+insert("calculate 1*0","0")
+insert("calculate 47-47","0")
+insert("calculate 100//4","25")
+test()
